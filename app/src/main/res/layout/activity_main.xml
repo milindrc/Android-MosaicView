@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".customView1.MainActivity">
+
+        <View
+            android:id="@+id/touchHandler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <com.app.trymosaic.customView1.VScroll
             android:background="@color/colorAccent"
@@ -50,6 +55,6 @@
             </com.app.trymosaic.customView1.HScroll>
         </com.app.trymosaic.customView1.VScroll>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </layout>

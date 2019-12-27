@@ -7,6 +7,10 @@ import android.widget.HorizontalScrollView;
 
 public class HScroll extends HorizontalScrollView {
 
+
+    OnTouchListener onTouchListener;
+    boolean isBlocked;
+
     public HScroll(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -21,6 +25,25 @@ public class HScroll extends HorizontalScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        return false;
+//        return onTouchListener.onTouch(null,ev);
+        return isBlocked;
+    }
+
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public OnTouchListener getOnTouchListener() {
+        return onTouchListener;
+    }
+
+    @Override
+    public void setOnTouchListener(OnTouchListener onTouchListener) {
+        this.onTouchListener = onTouchListener;
     }
 }

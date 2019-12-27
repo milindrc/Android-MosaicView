@@ -2,12 +2,16 @@ package com.app.trymosaic.customView1;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 public class VScroll extends ScrollView {
 
     private int verticalScrollOffset;
+    private boolean isBlocked;
+    OnTouchListener onTouchListener;
+
 
     public VScroll(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -23,7 +27,8 @@ public class VScroll extends ScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        return false;
+//        return onTouchListener.onTouch(null,ev);
+        return isBlocked;
     }
 
     @Override
@@ -38,5 +43,22 @@ public class VScroll extends ScrollView {
 
     public void setVerticalScrollOffset(int verticalScrollOffset) {
         this.verticalScrollOffset = verticalScrollOffset;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public OnTouchListener getOnTouchListener() {
+        return onTouchListener;
+    }
+
+    @Override
+    public void setOnTouchListener(OnTouchListener onTouchListener) {
+        this.onTouchListener = onTouchListener;
     }
 }
