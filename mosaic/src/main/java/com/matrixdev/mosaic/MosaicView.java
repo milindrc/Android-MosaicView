@@ -1,4 +1,4 @@
-package com.app.trymosaic.customView1;
+package com.matrixdev.mosaic;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,27 +15,22 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.app.trymosaic.R;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class CustomView extends View {
+public class MosaicView extends View {
 
     private final GestureDetector singleTapGesture;
 
@@ -68,19 +63,17 @@ public class CustomView extends View {
     int random = 0;
     private float touchX;
     private float touchY;
-    private RelativeLayout rootLayout;
     private boolean passingTouchEventToParent;
     private Rect hitRect = new Rect();
-    private View touchHandler;
     private Handler timer;
-    private ItemChooseInterface abc;
+    private ItemChooseInterface onItemChooseListener;
 
-    public CustomView(Context context, AttributeSet attrs) {
+    public MosaicView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         this.context = context;
         singleTapGesture = new GestureDetector(context, new TapGesture());
-        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.CustomView);
+        TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.MosaicView);
         draw = context.getResources().obtainTypedArray(R.array.random_imgs);
 
         bitmapObjectClasses.clear();
@@ -100,7 +93,7 @@ public class CustomView extends View {
         draw.recycle();
     }
 
-    public CustomView(Context context, Drawable mCustomImage) {
+    public MosaicView(Context context, Drawable mCustomImage) {
         super(context);
         singleTapGesture = new GestureDetector(context, new TapGesture());
 
@@ -209,26 +202,18 @@ public class CustomView extends View {
                 public void run() {
                     //todo use touchx and touchy
 
-                    abc = new ItemChooseInterface() {
-                        @Override
-                        public void itemChooseCallBack(Object genericObject) {
-                            for (int i = 0; i < bitmapObjectClasses.size(); i++) {
-                                if (bitmapObjectClasses.get(i).getLeft() <= touchX &&
-                                        bitmapObjectClasses.get(i).getRight() >= touchX &&
-                                        bitmapObjectClasses.get(i).getTop() <= touchY &&
-                                        bitmapObjectClasses.get(i).getBottom() >= touchY ) {
+                    for (int i = 0; i < bitmapObjectClasses.size(); i++) {
+                        if (bitmapObjectClasses.get(i).getLeft() <= touchX &&
+                                bitmapObjectClasses.get(i).getRight() >= touchX &&
+                                bitmapObjectClasses.get(i).getTop() <= touchY &&
+                                bitmapObjectClasses.get(i).getBottom() >= touchY ) {
 
-                                    genericObject=bitmapObjectClasses.get(i);
-
-                                }
-                            }
+                            BitmapObjectClass data = bitmapObjectClasses.get(i);
+                            if(onItemChooseListener!=null)
+                                onItemChooseListener.itemChoose(data.getGenericObject());
                         }
-                    };
+                    }
 
-                    Intent intent = new Intent(context, Main2Activity.class);
-                    //pass abc in intent
-                    context.startActivity(intent);
-                    Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
                 }
             }, 300);
         }
@@ -241,8 +226,6 @@ public class CustomView extends View {
 
         hscroll = ((HScroll) ((LinearLayout) getParent()).getParent());
         vScroll = (VScroll) ((HScroll) ((LinearLayout) getParent()).getParent()).getParent();
-        rootLayout = (RelativeLayout) vScroll.getParent();
-        touchHandler = rootLayout.findViewById(R.id.touchHandler);
 
         hscroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -501,4 +484,20 @@ public class CustomView extends View {
         }
     }
 
+    public <T extends BitmapContainer>void prepare(ItemChooseInterface<T> onItemChooseListener,ArrayList<T> objects){
+        this.onItemChooseListener = onItemChooseListener;
+        bitmapObjectClasses.clear();
+        for (int i = 0; i < objects.size(); i++) {
+            random = new Random().nextInt(70);
+            Log.d("-----RANDOM", "" + random);
+            Bitmap bitmap = addRoundCorners(objects.get(i).toBitmap(), random);
+            BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
+
+            bitmapObjectClass.setBitmap(bitmap);
+            bitmapObjectClass.setGenericObject(objects.get(i));
+            bitmapObjectClasses.add(bitmapObjectClass);
+        }
+        totalCompanies = draw.length();
+        invalidate();
+    }
 }

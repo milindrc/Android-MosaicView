@@ -1,4 +1,4 @@
-package com.app.trymosaic.customView1;
+package com.matrixdev.mosaic;
 
 import android.content.Context;
 import android.util.AttributeSet;

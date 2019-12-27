@@ -1,8 +1,8 @@
-package com.app.trymosaic.customView1;
+package com.matrixdev.mosaic;
 
 import android.graphics.Bitmap;
 
-public class BitmapObjectClass<T> implements ItemChooseInterface{
+public class BitmapObjectClass<T>{
 
     private Bitmap bitmap=null;
     private int left;
@@ -10,13 +10,13 @@ public class BitmapObjectClass<T> implements ItemChooseInterface{
     private int right;
     private int bottom;
 
-    private Object genericObject;
+    private T genericObject;
 
-    public void setGenericObject(Object object) {
+    public void setGenericObject(T object) {
         this.genericObject = object;
     }
 
-    public Object getGenericObject() {
+    public T getGenericObject() {
         return genericObject;
     }
 
@@ -60,8 +60,4 @@ public class BitmapObjectClass<T> implements ItemChooseInterface{
         this.bottom = bottom;
     }
 
-    @Override
-    public void itemChooseCallBack(Object genericObject) {
-        this.genericObject=genericObject;
-    }
 }

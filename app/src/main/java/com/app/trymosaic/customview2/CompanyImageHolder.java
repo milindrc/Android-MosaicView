@@ -4,18 +4,16 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 
 import com.app.trymosaic.R;
-import com.app.trymosaic.customView1.HScroll;
-import com.app.trymosaic.databinding.CompanyHolderBinding;
+import com.matrixdev.mosaic.HScroll;
+
 
 public class CompanyImageHolder extends RelativeLayout {
 
