@@ -1,6 +1,7 @@
 package com.app.trymosaic.customView1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,8 +38,6 @@ import java.util.TimerTask;
 public class CustomView extends View {
 
     private final GestureDetector singleTapGesture;
-    private int mCircleBackgroundColor = 0;
-    //    private Drawable mCustomImage;
 
     int perc, side;
     Context context;
@@ -62,7 +61,6 @@ public class CustomView extends View {
     private int currentPosY;
 
     ArrayList<BitmapObjectClass> bitmapObjectClasses = new ArrayList<>();
-    //    ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     int totalCompanies = -1;
 
     int count = 1;
@@ -75,18 +73,15 @@ public class CustomView extends View {
     private Rect hitRect = new Rect();
     private View touchHandler;
     private Handler timer;
+    private ItemChooseInterface abc;
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         this.context = context;
         singleTapGesture = new GestureDetector(context, new TapGesture());
-//        mCustomImage = context.getResources().getDrawable(R.drawable.usability_testing_prototype);
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.CustomView);
         draw = context.getResources().obtainTypedArray(R.array.random_imgs);
-//        int mRadiusHeight = attributes.getDimensionPixelSize(R.styleable.CustomView_radius_dimen, 5);
-//        mCircleBackgroundColor = attributes.getDimensionPixelSize(R.styleable.CustomView_circle_background, 50);
-//        mRectangleBackgroundColor = attributes.getColor(R.styleable.RectangleViewAttrs_rectangle_background, Color.BLACK);
 
         bitmapObjectClasses.clear();
         for (int i = 0; i < draw.length(); i++) {
@@ -97,12 +92,9 @@ public class CustomView extends View {
             BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
 
             bitmapObjectClass.setBitmap(bitmap);
-//            bitmap= pad(bitmap,0,random);
             bitmapObjectClasses.add(bitmapObjectClass);
         }
 
-//        bitmap = BitmapFactory.decodeResource(getResources(), draw.getResourceId(count-1,-1));
-//        bitmap = addRoundCorners(bitmap, 40);
         attributes.recycle();
         totalCompanies = draw.length();
         draw.recycle();
@@ -112,12 +104,9 @@ public class CustomView extends View {
         super(context);
         singleTapGesture = new GestureDetector(context, new TapGesture());
 
-//        this.mCustomImage = mCustomImage;
     }
 
     public void drawRectCenter(Canvas canvas, BitmapObjectClass bitmapObjectClass, int x, int y, int height, int width) {
-//        canvas.drawLine(canvas.getWidth()/2,0,canvas.getWidth()/2, canvas.getHeight(),new Paint());
-//        canvas.drawLine(0,canvas.getHeight()/2,canvas.getWidth(), canvas.getHeight()/2,new Paint());
 
         int centerX = canvas.getWidth() / 2;
         int centerY = canvas.getHeight() / 2;
@@ -186,15 +175,9 @@ public class CustomView extends View {
 
         //check if touchX and touchY is inside rect
         //shrink
-
         if (touchX > 0 && touchY > 0) {
             if (rect.bottom >= touchY && rect.top <= touchY && rect.left <= touchX && rect.right >= touchX) {
-//                rect.right=rect.right-100;
-//                rect.left=rect.left-100;
-//                rect.top=rect.top-100;
                 rect.set(rect.left + dpToPx(10), rect.top + dpToPx(10), rect.right - dpToPx(10), rect.bottom - dpToPx(10));
-//                touchX =0;
-//                touchY=0;
             }
         }
 
@@ -213,12 +196,9 @@ public class CustomView extends View {
         bitmapObjectClass.setBottom(bottom);
     }
 
-
-
-    //
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        if(motionEvent.getAction()==MotionEvent.ACTION_DOWN) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
             Log.d("-----Down", "down");
             touchX = motionEvent.getX();
             touchY = motionEvent.getY();
@@ -228,9 +208,29 @@ public class CustomView extends View {
                 @Override
                 public void run() {
                     //todo use touchx and touchy
+
+                    abc = new ItemChooseInterface() {
+                        @Override
+                        public void itemChooseCallBack(Object genericObject) {
+                            for (int i = 0; i < bitmapObjectClasses.size(); i++) {
+                                if (bitmapObjectClasses.get(i).getLeft() <= touchX &&
+                                        bitmapObjectClasses.get(i).getRight() >= touchX &&
+                                        bitmapObjectClasses.get(i).getTop() <= touchY &&
+                                        bitmapObjectClasses.get(i).getBottom() >= touchY ) {
+
+                                    genericObject=bitmapObjectClasses.get(i);
+
+                                }
+                            }
+                        }
+                    };
+
+                    Intent intent = new Intent(context, Main2Activity.class);
+                    //pass abc in intent
+                    context.startActivity(intent);
                     Toast.makeText(context, "test", Toast.LENGTH_SHORT).show();
                 }
-            },300);
+            }, 300);
         }
         return super.onTouchEvent(motionEvent);
 
@@ -239,13 +239,9 @@ public class CustomView extends View {
 
     private void init() {
 
-
-//        b = BitmapFactory.decodeResource(getResources(), R.drawable.usability_testing_prototype);
-//        b = addRoundCorners(b, 40);
-
         hscroll = ((HScroll) ((LinearLayout) getParent()).getParent());
         vScroll = (VScroll) ((HScroll) ((LinearLayout) getParent()).getParent()).getParent();
-        rootLayout = (RelativeLayout)vScroll.getParent();
+        rootLayout = (RelativeLayout) vScroll.getParent();
         touchHandler = rootLayout.findViewById(R.id.touchHandler);
 
         hscroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -256,7 +252,6 @@ public class CustomView extends View {
                 horzLim = hscroll.getMeasuredWidth() / 2 + 500;
 
                 maxScrollY = getHeight() - vScroll.getMeasuredHeight();
-                Log.d("-----VSCROLL", "" + getHeight() + "|" + vScroll.getMeasuredHeight() + "|" + maxScrollY + "|" + vScroll.getVerticalScrollOffset());
                 vScroll.scrollTo(0, maxScrollY / 2);
                 verLim = vScroll.getMeasuredHeight() / 2;
             }
@@ -264,11 +259,8 @@ public class CustomView extends View {
         hscroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-//                if (touchX != 0)
-//                    return;
-                if(timer!=null)
+                if (timer != null)
                     timer.removeCallbacksAndMessages(null);
-                Log.d("-----Scroll","Scroll");
 
                 int arr[] = new int[2];
                 getLocationInWindow(arr);
@@ -286,19 +278,15 @@ public class CustomView extends View {
                 perc = (Math.abs(arr[0]) * 100) / maxScrollX;
                 side = 50 + ((50) * perc) / 100;
 
-//                Log.d("-----", "arr0 " + arr[0] + " arr1 " + arr[1] + " side:" + side + " Scroll:" + vScroll.getScrollY() + "," + leftDistance + "|" + rightDistance + "|" + midX + " current position:" + currentPosX);
-
                 if (countDownTimer == null) {
                     countDownTimer = new CountDownTimer(10, 10) {
 
                         public void onTick(long millisUntilFinished) {
-//                            Log.d("----INVAL", "invalidate");
                         }
 
                         public void onFinish() {
                             invalidate();
                             countDownTimer = null;
-//                            Log.d("----INVAL", "invalidate start");
 
                         }
 
@@ -380,7 +368,6 @@ public class CustomView extends View {
         paint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
         Canvas canvas = new Canvas(bmpWithBorder);
-//        canvas.drawColor(context.getResources().getColor(R.color.colorAccent)); //This represents White color
         canvas.clipPath(path);
         canvas.drawColor(
                 Color.TRANSPARENT,
@@ -389,14 +376,6 @@ public class CustomView extends View {
         canvas.drawBitmap(bmp, null, rect, paint);
         return bmpWithBorder;
     }
-
-//    public Bitmap pad(Bitmap Src, int padding_x, int padding_y) {
-//        Bitmap outputimage = Bitmap.createBitmap(Src.getWidth() + padding_x,Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
-//        Canvas can = new Canvas(outputimage);
-////        can.drawColor(context.getResources().getColor(R.color.colorAccent)); //This represents White color
-//        can.drawBitmap(Src, padding_x/2, padding_y, null);
-//        return outputimage;
-//    }
 
     private int dpToPx(float dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -409,22 +388,14 @@ public class CustomView extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (getParent() != null) {
-            Log.d("-----ATW", "sdf");
             init();
         } else {
-            Log.d("-----ATW", "errg");
 
         }
     }
 
 
     protected void onDraw(Canvas canvas) {
-//        canvas.drawLine(canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight(), new Paint());
-//        canvas.drawLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2, new Paint());
-
-//        canvas.drawColor(
-//                Color.TRANSPARENT,
-//                PorterDuff.Mode.CLEAR);
 
         int centerX = canvas.getWidth() / 2;
         int centerY = canvas.getHeight() / 2;
@@ -434,7 +405,6 @@ public class CustomView extends View {
         if (count <= totalCompanies) {
             drawRectCenter(canvas, bitmapObjectClasses.get(count - 1), centerX, centerY, dpToPx(fullOffset), dpToPx(fullOffset));
         }
-//        Log.d("----SIDE", "" + side);
 
         for (int level = 1; level < 5; level++) {
             if (count <= totalCompanies) {

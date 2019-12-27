@@ -19,19 +19,12 @@ public class MainActivity extends AppCompatActivity {
     private float mx, my;
     private float curX, curY;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this, R.layout.activity_main);
         
-        drawCanvas();
-//        new Keypaint(this);
-//        new CustomView(this);
-
-
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -60,15 +53,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    private void drawCanvas() {
-
-        draw = new Draw(this);
-        draw.setBackgroundColor(Color.BLUE);
-
-//        binding.llDraw.removeAllViews();
-//        binding.llDraw.addView(draw);
-//        setContentView(binding.llDraw);
     }
 }

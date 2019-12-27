@@ -27,18 +27,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-<!--                    <View-->
-<!--                        android:layout_width="500dp"-->
-<!--                        android:layout_height="500dp"/>-->
-
-<!--                    <com.app.trymosaic.customView1.CustomView-->
-<!--                        app:circle_background="@color/colorPrimary"-->
-<!--                        app:radius_dimen="5dp"-->
-<!--                        android:background="@color/colorPrimary"-->
-<!--                        app:rectangle_background="@color/colorPrimary"-->
-<!--                        android:layout_width="200dp"-->
-<!--                        android:layout_height="200dp"/>-->
-
                     <com.app.trymosaic.customView1.CustomView
                         app:circle_background="@android:color/black"
                         app:radius_dimen="5dp"
@@ -47,10 +35,6 @@
                         android:layout_width="2000dp"
                         android:layout_height="2000dp"/>
 
-                    <!--                    <ImageView-->
-<!--                        android:src="@drawable/usability_testing_prototype"-->
-<!--                        android:layout_width="200dp"-->
-<!--                        android:layout_height="200dp"/>-->
                 </LinearLayout>
             </com.app.trymosaic.customView1.HScroll>
         </com.app.trymosaic.customView1.VScroll>
