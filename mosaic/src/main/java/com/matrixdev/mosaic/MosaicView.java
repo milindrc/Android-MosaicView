@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -67,6 +69,9 @@ public class MosaicView extends View {
     private Rect hitRect = new Rect();
     private Handler timer;
     private ItemChooseInterface onItemChooseListener;
+    private ViewGroup rootview;
+    private float mx;
+    private float my;
 
     public MosaicView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -227,6 +232,37 @@ public class MosaicView extends View {
         hscroll = ((HScroll) ((LinearLayout) getParent()).getParent());
         vScroll = (VScroll) ((HScroll) ((LinearLayout) getParent()).getParent()).getParent();
 
+        rootview=(ViewGroup)vScroll.getParent();
+        rootview.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                float curX, curY;
+
+                switch (event.getAction()) {
+
+                    case MotionEvent.ACTION_DOWN:
+                        mx = event.getX();
+                        my = event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        curX = event.getX();
+                        curY = event.getY();
+                        vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                        hscroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                        mx = curX;
+                        my = curY;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        curX = event.getX();
+                        curY = event.getY();
+                        vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                        hscroll.scrollBy((int) (mx - curX), (int) (my - curY));
+                        break;
+                }
+
+                return true;
+            }
+        });
         hscroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
