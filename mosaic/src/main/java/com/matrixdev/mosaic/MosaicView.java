@@ -73,6 +73,11 @@ public class MosaicView extends View {
     private float mx;
     private float my;
 
+    private boolean isRoundedEdges;
+    private boolean isFadeEnabled;
+    private boolean isShrinkEnabled;
+
+
     public MosaicView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -80,6 +85,10 @@ public class MosaicView extends View {
         placeholder = createPlaceholder(dpToPx(100),dpToPx(100),Color.WHITE);
 
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.MosaicView);
+
+        isRoundedEdges = attributes.getBoolean(R.styleable.MosaicView_isRoundedEdges, true);
+        isFadeEnabled = attributes.getBoolean(R.styleable.MosaicView_isFadeEnabled, true);
+        isShrinkEnabled = attributes.getBoolean(R.styleable.MosaicView_isShrinkEnabled, true);
 
         attributes.recycle();
     }
@@ -107,11 +116,15 @@ public class MosaicView extends View {
             } else {
                 percX = (dist * 100) / leftDistance;
             }
-            int h = (height * percX) / 100;
-            height = height - ((h * percX) / 100);
-            int w = (width * percX) / 100;
-            width = width - ((w * percX) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
+            if(isShrinkEnabled){
+                int h = (height * percX) / 100;
+                height = height - ((h * percX) / 100);
+                int w = (width * percX) / 100;
+                width = width - ((w * percX) / 100);
+            }
+            if(isFadeEnabled){
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
+            }
         } else {  //right
             int dist = midX - pivotX;
             if (dist > rightDistance) {
@@ -119,11 +132,15 @@ public class MosaicView extends View {
             } else {
                 percX = (dist * 100) / rightDistance;
             }
-            int h = (height * percX) / 100;
-            height = height - ((h * percX) / 100);
-            int w = (width * percX) / 100;
-            width = width - ((w * percX) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
+            if(isShrinkEnabled){
+                int h = (height * percX) / 100;
+                height = height - ((h * percX) / 100);
+                int w = (width * percX) / 100;
+                width = width - ((w * percX) / 100);
+            }
+            if(isFadeEnabled){
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
+            }
         }
 
         int pivotY = currentPosY + (centerY - y);
@@ -135,11 +152,15 @@ public class MosaicView extends View {
             } else {
                 percY = (dist * 100) / topDistance;
             }
-            int h = (height * percY) / 100;
-            height = height - ((h * percY) / 100);
-            int w = (width * percY) / 100;
-            width = width - ((w * percY) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            if(isShrinkEnabled){
+                int h = (height * percY) / 100;
+                height = height - ((h * percY) / 100);
+                int w = (width * percY) / 100;
+                width = width - ((w * percY) / 100);
+            }
+            if(isFadeEnabled){
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            }
         } else {  //right
             int dist = midY - pivotY;
             if (dist > bottomDistance) {
@@ -147,11 +168,15 @@ public class MosaicView extends View {
             } else {
                 percY = (dist * 100) / bottomDistance;
             }
-            int h = (height * percY) / 100;
-            height = height - ((h * percY) / 100);
-            int w = (width * percY) / 100;
-            width = width - ((w * percY) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            if(isShrinkEnabled){
+                int h = (height * percY) / 100;
+                height = height - ((h * percY) / 100);
+                int w = (width * percY) / 100;
+                width = width - ((w * percY) / 100);
+            }
+            if(isFadeEnabled){
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            }
         }
 
         RectF rect = new RectF();
@@ -180,26 +205,6 @@ public class MosaicView extends View {
         bitmapObjectClass.setBottom(bottom);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            Log.d("-----Down", "down");
-            touchX = motionEvent.getX();
-            touchY = motionEvent.getY();
-
-            timer = new Handler();
-            timer.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //todo use touchx and touchy
-
-                }
-            }, 300);
-        }
-        return super.onTouchEvent(motionEvent);
-
-    }
-
     private void handleClick() {
         for (int i = 0; i < bitmapObjectClasses.size(); i++) {
             if (bitmapObjectClasses.get(i).getLeft() <= touchX &&
@@ -207,6 +212,7 @@ public class MosaicView extends View {
                     bitmapObjectClasses.get(i).getTop() <= touchY &&
                     bitmapObjectClasses.get(i).getBottom() >= touchY ) {
 
+                playSoundEffect(android.view.SoundEffectConstants.CLICK);
                 BitmapObjectClass data = bitmapObjectClasses.get(i);
                 if(onItemChooseListener!=null)
                     onItemChooseListener.itemChoose(data.getGenericObject());
@@ -356,6 +362,14 @@ public class MosaicView extends View {
         return bmpWithBorder;
     }
 
+        public Bitmap pad(Bitmap Src, int padding_y) {
+        Bitmap outputimage = Bitmap.createBitmap(Src.getWidth(),Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
+        Canvas can = new Canvas(outputimage);
+//        can.drawColor(context.getResources().getColor(R.color.colorAccent)); //This represents White color
+        can.drawBitmap(Src, 0, padding_y, null);
+        return outputimage;
+    }
+
     private int dpToPx(float dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         float fpixels = metrics.density * dp;
@@ -487,7 +501,12 @@ public class MosaicView extends View {
             if(i>=random.size()){
                 random.add(new Random().nextInt(70));
             }
-            Bitmap bitmap = addRoundCorners(objects.get(i).toBitmap(), random.get(i));
+            Bitmap bitmap;
+            if(isRoundedEdges){
+                bitmap = addRoundCorners(objects.get(i).toBitmap(), random.get(i));
+            }else{
+                bitmap=pad(objects.get(i).toBitmap(),random.get(i));
+            }
             BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
 
             bitmapObjectClass.setBitmap(bitmap);
@@ -507,7 +526,11 @@ public class MosaicView extends View {
             }
             final BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
             final int finalI = i;
-            bitmapObjectClass.setBitmap(addRoundCorners(placeholder, random.get(i)));
+            if(isRoundedEdges){
+                bitmapObjectClass.setBitmap(addRoundCorners(placeholder, random.get(i)));
+            }else{
+                bitmapObjectClass.setBitmap(pad(placeholder,random.get(i)));
+            }
             Glide.with(context)
                     .asBitmap()
                     .load(objects.get(i).toUrl())
@@ -515,8 +538,12 @@ public class MosaicView extends View {
                         @Override
                         public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                             Log.d("----","loaded"+finalI);
-                            Bitmap rounded = addRoundCorners(resource, random.get(finalI));
-                            bitmapObjectClass.setBitmap(rounded);
+                            if(isRoundedEdges){
+                                Bitmap rounded = addRoundCorners(resource, random.get(finalI));
+                                bitmapObjectClass.setBitmap(rounded);
+                            }else{
+                                bitmapObjectClass.setBitmap(pad(resource,random.get(finalI)));
+                            }
                             invalidate();
                         }
                     });

@@ -1,31 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="MosaicView">
-        <attr name="rectangle_background" format="color" />
-        <attr name="circle_background" format="color" />
         <attr name="radius_dimen" format="dimension" />
+        <attr name="isRoundedEdges" format="boolean"/>
+        <attr name="isFadeEnabled" format="boolean"/>
+        <attr name="isShrinkEnabled" format="boolean"/>
+
     </declare-styleable>
 
-    <integer-array name="random_imgs">
-        <item>@drawable/company_logo</item>
-        <item>@drawable/company_logo1</item>
-        <item>@drawable/company_logo2</item>
-        <item>@drawable/company_logo3</item>
-        <item>@drawable/company_logo4</item>
-        <item>@drawable/company_logo6</item>
-        <item>@drawable/company_logo7</item>
-        <item>@drawable/company_logo8</item>
-        <item>@drawable/company_logo9</item>
-        <item>@drawable/company_logo10</item>
-        <item>@drawable/company_logo11</item>
-        <item>@drawable/company_logo12</item>
-        <item>@drawable/company_logo13</item>
-        <item>@drawable/company_logo14</item>
-        <item>@drawable/company_logo15</item>
-        <item>@drawable/company_logo16</item>
-        <item>@drawable/company_logo17</item>
-        <item>@drawable/company_logo18</item>
-        <item>@drawable/company_logo19</item>
-        <item>@drawable/company_logo20</item>
-    </integer-array>
 </resources>

@@ -11,10 +11,12 @@
             android:background="@color/colorAccent"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:scrollbars="none"
             android:id="@+id/vScroll">
 
             <com.matrixdev.mosaic.HScroll
                 android:id="@+id/hScroll"
+                android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -24,10 +26,8 @@
 
                     <com.matrixdev.mosaic.MosaicView
                         android:id="@+id/mosaic"
-                        app:circle_background="@android:color/black"
                         app:radius_dimen="5dp"
                         android:background="@color/colorblue"
-                        app:rectangle_background="@android:color/black"
                         android:layout_width="2000dp"
                         android:layout_height="2000dp"/>
 
