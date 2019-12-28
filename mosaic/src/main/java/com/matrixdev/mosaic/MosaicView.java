@@ -32,8 +32,6 @@ import java.util.Random;
 
 public class MosaicView extends View {
 
-    private final GestureDetector singleTapGesture;
-
     int perc, side;
     Context context;
     private CountDownTimer countDownTimer;
@@ -63,8 +61,6 @@ public class MosaicView extends View {
     int random = 0;
     private float touchX;
     private float touchY;
-    private boolean passingTouchEventToParent;
-    private Rect hitRect = new Rect();
     private Handler timer;
     private ItemChooseInterface onItemChooseListener;
 
@@ -72,30 +68,28 @@ public class MosaicView extends View {
         super(context, attrs);
 
         this.context = context;
-        singleTapGesture = new GestureDetector(context, new TapGesture());
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.MosaicView);
-        draw = context.getResources().obtainTypedArray(R.array.random_imgs);
-
-        bitmapObjectClasses.clear();
-        for (int i = 0; i < draw.length(); i++) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), draw.getResourceId(i, -1));
-            random = new Random().nextInt(70);
-            Log.d("-----RANDOM", "" + random);
-            bitmap = addRoundCorners(bitmap, random);
-            BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
-
-            bitmapObjectClass.setBitmap(bitmap);
-            bitmapObjectClasses.add(bitmapObjectClass);
-        }
-
+//        draw = context.getResources().obtainTypedArray(R.array.random_imgs);
+//
+//        bitmapObjectClasses.clear();
+//        for (int i = 0; i < draw.length(); i++) {
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), draw.getResourceId(i, -1));
+//            random = new Random().nextInt(70);
+//            Log.d("-----RANDOM", "" + random);
+//            bitmap = addRoundCorners(bitmap, random);
+//            BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
+//
+//            bitmapObjectClass.setBitmap(bitmap);
+//            bitmapObjectClasses.add(bitmapObjectClass);
+//        }
+//
         attributes.recycle();
-        totalCompanies = draw.length();
-        draw.recycle();
+//        totalCompanies = draw.length();
+//        draw.recycle();
     }
 
     public MosaicView(Context context, Drawable mCustomImage) {
         super(context);
-        singleTapGesture = new GestureDetector(context, new TapGesture());
 
     }
 
