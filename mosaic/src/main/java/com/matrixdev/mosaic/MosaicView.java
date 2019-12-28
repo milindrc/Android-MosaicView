@@ -59,8 +59,7 @@ public class MosaicView extends View {
     int totalCompanies = -1;
 
     int count = 1;
-    TypedArray draw;
-    int random = 0;
+    ArrayList<Integer> random = new ArrayList();
     private float touchX;
     private float touchY;
     private Handler timer;
@@ -169,7 +168,7 @@ public class MosaicView extends View {
         //shrink
         if (touchX > 0 && touchY > 0) {
             if (rect.bottom >= touchY && rect.top <= touchY && rect.left <= touchX && rect.right >= touchX) {
-                rect.set(rect.left + dpToPx(10), rect.top + dpToPx(10), rect.right - dpToPx(10), rect.bottom - dpToPx(10));
+                rect.set(rect.left + dpToPx(2), rect.top + dpToPx(2), rect.right - dpToPx(2), rect.bottom - dpToPx(2));
             }
         }
 
@@ -201,23 +200,25 @@ public class MosaicView extends View {
                 public void run() {
                     //todo use touchx and touchy
 
-                    for (int i = 0; i < bitmapObjectClasses.size(); i++) {
-                        if (bitmapObjectClasses.get(i).getLeft() <= touchX &&
-                                bitmapObjectClasses.get(i).getRight() >= touchX &&
-                                bitmapObjectClasses.get(i).getTop() <= touchY &&
-                                bitmapObjectClasses.get(i).getBottom() >= touchY ) {
-
-                            BitmapObjectClass data = bitmapObjectClasses.get(i);
-                            if(onItemChooseListener!=null)
-                                onItemChooseListener.itemChoose(data.getGenericObject());
-                        }
-                    }
-
                 }
             }, 300);
         }
         return super.onTouchEvent(motionEvent);
 
+    }
+
+    private void handleClick() {
+        for (int i = 0; i < bitmapObjectClasses.size(); i++) {
+            if (bitmapObjectClasses.get(i).getLeft() <= touchX &&
+                    bitmapObjectClasses.get(i).getRight() >= touchX &&
+                    bitmapObjectClasses.get(i).getTop() <= touchY &&
+                    bitmapObjectClasses.get(i).getBottom() >= touchY ) {
+
+                BitmapObjectClass data = bitmapObjectClasses.get(i);
+                if(onItemChooseListener!=null)
+                    onItemChooseListener.itemChoose(data.getGenericObject());
+            }
+        }
     }
 
 
@@ -237,16 +238,36 @@ public class MosaicView extends View {
                     case MotionEvent.ACTION_DOWN:
                         mx = event.getX();
                         my = event.getY();
+                        touchX = event.getX() + hscroll.getScrollX();
+                        touchY = event.getY() + vScroll.getScrollY();
+                        invalidate();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         curX = event.getX();
                         curY = event.getY();
+                        Log.d("-----Touch",""+touchX+","+touchY+"|"+(curX+hscroll.getScrollX()));
+
+                        if(curX+ hscroll.getScrollX()< touchX-10 || curX+ hscroll.getScrollX()>touchX+10){
+                            touchX = 0;
+                            touchY = 0;
+                        }
+                        if(curY+ vScroll.getScrollY()< touchY-10  || curY+ vScroll.getScrollY()>touchY+10){
+                            touchX = 0;
+                            touchY = 0;
+                        }
                         vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
                         hscroll.scrollBy((int) (mx - curX), (int) (my - curY));
                         mx = curX;
                         my = curY;
                         break;
                     case MotionEvent.ACTION_UP:
+                        if(touchX!=0){
+
+                            handleClick();
+                            touchX = 0;
+                            touchY = 0;
+                            invalidate();
+                        }
                         curX = event.getX();
                         curY = event.getY();
                         vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
@@ -514,20 +535,22 @@ public class MosaicView extends View {
         }
     }
 
-    public <T extends BitmapContainer>void prepare(ItemChooseInterface<T> onItemChooseListener,ArrayList<T> objects){
+    public <T extends BitmapContainer>void prepare(ArrayList<T> objects,ItemChooseInterface<T> onItemChooseListener){
         this.onItemChooseListener = onItemChooseListener;
         bitmapObjectClasses.clear();
         for (int i = 0; i < objects.size(); i++) {
-            random = new Random().nextInt(70);
+            if(i>=random.size()){
+                random.add(new Random().nextInt(70));
+            }
             Log.d("-----RANDOM", "" + random);
-            Bitmap bitmap = addRoundCorners(objects.get(i).toBitmap(), random);
+            Bitmap bitmap = addRoundCorners(objects.get(i).toBitmap(), random.get(i));
             BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
 
             bitmapObjectClass.setBitmap(bitmap);
             bitmapObjectClass.setGenericObject(objects.get(i));
             bitmapObjectClasses.add(bitmapObjectClass);
         }
-        totalCompanies = draw.length();
+        totalCompanies = objects.size();
         invalidate();
     }
 }

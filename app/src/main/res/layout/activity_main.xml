@@ -23,6 +23,7 @@
                     android:layout_height="wrap_content">
 
                     <com.matrixdev.mosaic.MosaicView
+                        android:id="@+id/mosaic"
                         app:circle_background="@android:color/black"
                         app:radius_dimen="5dp"
                         android:background="@color/colorblue"
