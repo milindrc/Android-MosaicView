@@ -5,6 +5,8 @@
         <attr name="isRoundedEdges" format="boolean"/>
         <attr name="isFadeEnabled" format="boolean"/>
         <attr name="isShrinkEnabled" format="boolean"/>
+        <attr name="imageBackground" format="color"/>
+
 
     </declare-styleable>
 

@@ -38,6 +38,7 @@ import java.util.Random;
 
 public class MosaicView extends View {
 
+    private int defaultColor;
     int perc, side;
     Context context;
     private CountDownTimer countDownTimer;
@@ -89,6 +90,7 @@ public class MosaicView extends View {
         isRoundedEdges = attributes.getBoolean(R.styleable.MosaicView_isRoundedEdges, true);
         isFadeEnabled = attributes.getBoolean(R.styleable.MosaicView_isFadeEnabled, true);
         isShrinkEnabled = attributes.getBoolean(R.styleable.MosaicView_isShrinkEnabled, true);
+        defaultColor= attributes.getColor(R.styleable.MosaicView_imageBackground,Color.WHITE);
 
         attributes.recycle();
     }
@@ -354,19 +356,20 @@ public class MosaicView extends View {
 
         Canvas canvas = new Canvas(bmpWithBorder);
         canvas.clipPath(path);
-        canvas.drawColor(
-                Color.TRANSPARENT,
-                PorterDuff.Mode.CLEAR);
 
+        canvas.drawColor(defaultColor);
         canvas.drawBitmap(bmp, null, rect, paint);
         return bmpWithBorder;
     }
 
-        public Bitmap pad(Bitmap Src, int padding_y) {
+    public Bitmap pad(Bitmap Src, int padding_y) {
         Bitmap outputimage = Bitmap.createBitmap(Src.getWidth(),Src.getHeight() + padding_y, Bitmap.Config.ARGB_8888);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
         Canvas can = new Canvas(outputimage);
-//        can.drawColor(context.getResources().getColor(R.color.colorAccent)); //This represents White color
-        can.drawBitmap(Src, 0, padding_y, null);
+        can.drawColor(defaultColor); //This represents White color
+        can.drawBitmap(Src, 0, padding_y, paint);
         return outputimage;
     }
 
