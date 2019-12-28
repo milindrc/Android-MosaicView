@@ -80,23 +80,8 @@ public class MosaicView extends View {
         placeholder = createPlaceholder(dpToPx(100),dpToPx(100),Color.WHITE);
 
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.MosaicView);
-//        draw = context.getResources().obtainTypedArray(R.array.random_imgs);
-//
-//        bitmapObjectClasses.clear();
-//        for (int i = 0; i < draw.length(); i++) {
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), draw.getResourceId(i, -1));
-//            random = new Random().nextInt(70);
-//            Log.d("-----RANDOM", "" + random);
-//            bitmap = addRoundCorners(bitmap, random);
-//            BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
-//
-//            bitmapObjectClass.setBitmap(bitmap);
-//            bitmapObjectClasses.add(bitmapObjectClass);
-//        }
-//
+
         attributes.recycle();
-//        totalCompanies = draw.length();
-//        draw.recycle();
     }
 
     public MosaicView(Context context, Drawable mCustomImage) {
@@ -337,63 +322,6 @@ public class MosaicView extends View {
             }
         });
 
-
-//        touchHandler.setOnTouchListener(new OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                for (int i = 0; i < bitmapObjectClasses.size(); i++) {
-//                    if (bitmapObjectClasses.get(i).getLeft() <= motionEvent.getX()+hscroll.getScrollX() &&
-//                            bitmapObjectClasses.get(i).getRight() >= motionEvent.getX()+hscroll.getScrollX() &&
-//                            bitmapObjectClasses.get(i).getTop() <= motionEvent.getY()+vScroll.getScrollY() &&
-//                            bitmapObjectClasses.get(i).getBottom() >= motionEvent.getY()+vScroll.getScrollY()) {
-//                        Log.d("Suuceess", "" + motionEvent.getAction());
-//                        switch (motionEvent.getAction()) {
-//                            case (MotionEvent.ACTION_DOWN):
-//                                hscroll.setBlocked(true);
-//                                vScroll.setBlocked(true);
-//                                touchX = motionEvent.getX()+hscroll.getScrollX();
-//                                touchY = motionEvent.getY()+vScroll.getScrollY();
-//                                invalidate();
-//                                Log.d("------", "Action was DOWN");
-//                        }
-//                    }
-//                }
-////                switch (motionEvent.getAction()) {
-////                    case (MotionEvent.ACTION_MOVE):
-////                        if(touchX!=0) {
-////
-////                        }else{
-//////                    motionEvent.setLocation(motionEvent.getX()+hscroll.getScrollX(),motionEvent.getY()+vScroll.getScrollY());
-////                        }
-////                        break;
-////                    case (MotionEvent.ACTION_UP):
-////                        touchX = 0;
-////                        touchY = 0;
-////                        Log.d("-----ACTION_UP", "dssf");
-////                        invalidate();
-////                    case MotionEvent.ACTION_CANCEL:
-////                        touchX = 0;
-////                        touchY = 0;
-////                        Log.d("-----ACTION_CAncel", "cancel");
-//////                invalidate();
-////                }
-////        if(touchX!=0)
-//
-//                Log.d("-----",""+motionEvent);
-////        singleTapGesture.onTouchEvent(motionEvent);
-////            motionEvent.setLocation(2654,2667);
-//                if(touchX!=0) {
-//                    motionEvent.setLocation(motionEvent.getX()+hscroll.getScrollX(),motionEvent.getY()+vScroll.getScrollY());
-//                    return true;
-//                }else {
-////            hscroll.setBlocked(false);
-////            vScroll.setBlocked(false);
-//                    return false;
-//                }
-//            }
-//        });
-
-
     }
 
     public static Bitmap createPlaceholder(int width, int height, int color) {
@@ -597,5 +525,13 @@ public class MosaicView extends View {
         }
         totalCompanies = objects.size();
         invalidate();
+    }
+
+    public Bitmap getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(Bitmap placeholder) {
+        this.placeholder = placeholder;
     }
 }

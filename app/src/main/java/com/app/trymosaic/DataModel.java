@@ -1,4 +1,4 @@
-package com.app.trymosaic.customView1;
+package com.app.trymosaic;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

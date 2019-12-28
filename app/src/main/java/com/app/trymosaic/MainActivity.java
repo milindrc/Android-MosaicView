@@ -1,15 +1,11 @@
-package com.app.trymosaic.customView1;
+package com.app.trymosaic;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.widget.Toast;
 
-import com.app.trymosaic.R;
-import com.app.trymosaic.customView1.Draw;
 import com.app.trymosaic.databinding.ActivityMainBinding;
 import com.matrixdev.mosaic.ItemChooseInterface;
 
@@ -19,9 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     ActivityMainBinding binding;
-    private Draw draw;
-    private float mx, my;
-    private float curX, curY;
     private ArrayList<DataModel> models;
     private Runnable onImageLoad;
 
@@ -29,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-
 
         initUI();
     }
