@@ -29,6 +29,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -54,6 +58,7 @@ public class MosaicView extends View {
     private int topDistance;
     private int bottomDistance;
     private int currentPosY;
+    private Bitmap placeholder;
 
     ArrayList<BitmapObjectClass> bitmapObjectClasses = new ArrayList<>();
     int totalCompanies = -1;
@@ -72,6 +77,8 @@ public class MosaicView extends View {
         super(context, attrs);
 
         this.context = context;
+        placeholder = createPlaceholder(dpToPx(100),dpToPx(100),Color.WHITE);
+
         TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.MosaicView);
 //        draw = context.getResources().obtainTypedArray(R.array.random_imgs);
 //
@@ -94,6 +101,7 @@ public class MosaicView extends View {
 
     public MosaicView(Context context, Drawable mCustomImage) {
         super(context);
+        placeholder = createPlaceholder(dpToPx(100),dpToPx(100),Color.WHITE);
 
     }
 
@@ -329,6 +337,7 @@ public class MosaicView extends View {
             }
         });
 
+
 //        touchHandler.setOnTouchListener(new OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -387,6 +396,14 @@ public class MosaicView extends View {
 
     }
 
+    public static Bitmap createPlaceholder(int width, int height, int color) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(color);
+        canvas.drawRect(0F, 0F, (float) width, (float) height, paint);
+        return bitmap;
+    }
 
     private Bitmap addRoundCorners(Bitmap bmp, int padding_y) {
         Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight() + padding_y, bmp.getConfig());
@@ -542,11 +559,39 @@ public class MosaicView extends View {
             if(i>=random.size()){
                 random.add(new Random().nextInt(70));
             }
-            Log.d("-----RANDOM", "" + random);
             Bitmap bitmap = addRoundCorners(objects.get(i).toBitmap(), random.get(i));
             BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
 
             bitmapObjectClass.setBitmap(bitmap);
+            bitmapObjectClass.setGenericObject(objects.get(i));
+            bitmapObjectClasses.add(bitmapObjectClass);
+        }
+        totalCompanies = objects.size();
+        invalidate();
+    }
+
+    public <T extends UrlContainer>void prepareFromUrl(ArrayList<T> objects,ItemChooseInterface<T> onItemChooseListener){
+        this.onItemChooseListener = onItemChooseListener;
+        bitmapObjectClasses.clear();
+        for (int i = 0; i < objects.size(); i++) {
+            if(i>=random.size()){
+                random.add(new Random().nextInt(70));
+            }
+            final BitmapObjectClass bitmapObjectClass = new BitmapObjectClass();
+            final int finalI = i;
+            bitmapObjectClass.setBitmap(addRoundCorners(placeholder, random.get(i)));
+            Glide.with(context)
+                    .asBitmap()
+                    .load(objects.get(i).toUrl())
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            Log.d("----","loaded"+finalI);
+                            Bitmap rounded = addRoundCorners(resource, random.get(finalI));
+                            bitmapObjectClass.setBitmap(rounded);
+                            invalidate();
+                        }
+                    });
             bitmapObjectClass.setGenericObject(objects.get(i));
             bitmapObjectClasses.add(bitmapObjectClass);
         }

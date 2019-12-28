@@ -11,8 +11,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.matrixdev.mosaic.BitmapContainer;
 import com.matrixdev.mosaic.MosaicView;
+import com.matrixdev.mosaic.UrlContainer;
 
-public class DataModel implements BitmapContainer {
+public class DataModel implements BitmapContainer, UrlContainer {
     String name;
     String url;
     Bitmap bitmap;
@@ -21,7 +22,7 @@ public class DataModel implements BitmapContainer {
         this.name = name;
         this.url = url;
 
-        bitmap = textAsBitmap(name, 48*3,Color.BLACK);
+        bitmap = textAsBitmap(name, 40*3,Color.BLACK);
     }
 
     public void load(Activity activity, final Runnable onComplete){
@@ -80,5 +81,10 @@ public class DataModel implements BitmapContainer {
     @Override
     public Bitmap toBitmap() {
         return bitmap;
+    }
+
+    @Override
+    public String toUrl() {
+        return url;
     }
 }

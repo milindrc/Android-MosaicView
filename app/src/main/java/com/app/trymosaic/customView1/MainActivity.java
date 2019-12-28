@@ -63,17 +63,24 @@ public class MainActivity extends AppCompatActivity {
             add(new DataModel("HANDS ON TRADES PRIVATE LIMTED","https://s3-ap-southeast-1.amazonaws.com/maxwholesale/company_brands/5bbca40a5a3f1b6954b89096/companyLogo.jpg"));
         }};
 
-        onImageLoad = ()->{
-            binding.mosaic.prepare(models, model -> {
+//        onImageLoad = ()->{
+//            binding.mosaic.prepare(models, model -> {
+//                Toast.makeText(MainActivity.this, model.getName(), Toast.LENGTH_SHORT).show();
+//            });
+//
+//        };
+//
+//        for(DataModel model : models){
+//              model.load(this,onImageLoad);
+//        }
+
+
+        binding.mosaic.prepareFromUrl(models, new ItemChooseInterface<DataModel>() {
+            @Override
+            public void itemChoose(DataModel model) {
                 Toast.makeText(MainActivity.this, model.getName(), Toast.LENGTH_SHORT).show();
-            });
-
-        };
-
-        for(DataModel model : models){
-              model.load(this,onImageLoad);
-        }
-
+            }
+        });
 
     }
 
