@@ -475,21 +475,21 @@ public class MosaicView extends View {
     }
 
     private int getMargin(int offSet) {
-        if (offSet % 50 == 0) {
+        if (offSet % fullOffset == 0) {
             if (offSet > 0) {
-                return 30 * (Math.abs(offSet) / fullOffset);
+                return 40 * (Math.abs(offSet) / fullOffset);
             } else if (offSet == 0) {
                 return 0;
             } else {
-                return -30 * (Math.abs(offSet) / fullOffset);
+                return -40 * (Math.abs(offSet) / fullOffset);
             }
         } else {
             if (offSet > 0) {
-                return 15 * (Math.abs(offSet) / halfOffset);
+                return 20 * (Math.abs(offSet) / halfOffset);
             } else if (offSet == 0) {
                 return 0;
             } else {
-                return -15 * (Math.abs(offSet) / halfOffset);
+                return -20 * (Math.abs(offSet) / halfOffset);
             }
         }
     }
