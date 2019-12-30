@@ -154,7 +154,7 @@ public class MosaicView extends View {
             } else {
                 percY = (dist * 100) / topDistance;
             }
-            if(isShrinkEnabled){
+            if(isShrinkEnabled && percY!=0){
                 int h = (height * percY) / 100;
                 height = height - ((h * percY) / 100);
                 int w = (width * percY) / 100;
@@ -170,7 +170,7 @@ public class MosaicView extends View {
             } else {
                 percY = (dist * 100) / bottomDistance;
             }
-            if(isShrinkEnabled){
+            if(isShrinkEnabled && percY!=0){
                 int h = (height * percY) / 100;
                 height = height - ((h * percY) / 100);
                 int w = (width * percY) / 100;
