@@ -47,8 +47,8 @@ public class MosaicView extends View {
     private int maxScrollX;
     private int horzLim;
 
-    private final int halfOffset = 40;
-    private final int fullOffset = 80;
+    private int halfOffset = 60;
+    private int fullOffset = 120;
     private int leftDistance;
     private int rightDistance;
     private int midX;
@@ -91,6 +91,8 @@ public class MosaicView extends View {
         isFadeEnabled = attributes.getBoolean(R.styleable.MosaicView_isFadeEnabled, true);
         isShrinkEnabled = attributes.getBoolean(R.styleable.MosaicView_isShrinkEnabled, true);
         defaultColor = attributes.getColor(R.styleable.MosaicView_imageBackground, Color.WHITE);
+        fullOffset = attributes.getInteger(R.styleable.MosaicView_fullSize, 100);
+        halfOffset = attributes.getColor(R.styleable.MosaicView_halfSize, 50);
 
         attributes.recycle();
     }

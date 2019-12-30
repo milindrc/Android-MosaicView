@@ -6,6 +6,8 @@
         <attr name="isFadeEnabled" format="boolean"/>
         <attr name="isShrinkEnabled" format="boolean"/>
         <attr name="imageBackground" format="color"/>
+        <attr name="fullSize" format="integer"/>
+        <attr name="halfSize" format="integer"/>
 
 
     </declare-styleable>
