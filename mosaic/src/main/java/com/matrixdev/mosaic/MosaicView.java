@@ -107,11 +107,11 @@ public class MosaicView extends View {
             } else {
                 percX = (dist * 100) / leftDistance;
             }
-            int h = (height * percX) / 100;
-            height = height - ((h * percX) / 100);
-            int w = (width * percX) / 100;
-            width = width - ((w * percX) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
+                int h = (height * percX) / 100;
+                height = height - ((h * percX) / 100);
+                int w = (width * percX) / 100;
+                width = width - ((w * percX) / 100);
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
         } else {  //right
             int dist = midX - pivotX;
             if (dist > rightDistance) {
@@ -119,11 +119,11 @@ public class MosaicView extends View {
             } else {
                 percX = (dist * 100) / rightDistance;
             }
-            int h = (height * percX) / 100;
-            height = height - ((h * percX) / 100);
-            int w = (width * percX) / 100;
-            width = width - ((w * percX) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
+                int h = (height * percX) / 100;
+                height = height - ((h * percX) / 100);
+                int w = (width * percX) / 100;
+                width = width - ((w * percX) / 100);
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percX) / 100));
         }
 
         int pivotY = currentPosY + (centerY - y);
@@ -135,11 +135,13 @@ public class MosaicView extends View {
             } else {
                 percY = (dist * 100) / topDistance;
             }
-            int h = (height * percY) / 100;
-            height = height - ((h * percY) / 100);
-            int w = (width * percY) / 100;
-            width = width - ((w * percY) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            if(percY>0) {
+                int h = (height * percY) / 100;
+                height = height - ((h * percY) / 100);
+                int w = (width * percY) / 100;
+                width = width - ((w * percY) / 100);
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            }
         } else {  //right
             int dist = midY - pivotY;
             if (dist > bottomDistance) {
@@ -147,12 +149,16 @@ public class MosaicView extends View {
             } else {
                 percY = (dist * 100) / bottomDistance;
             }
-            int h = (height * percY) / 100;
-            height = height - ((h * percY) / 100);
-            int w = (width * percY) / 100;
-            width = width - ((w * percY) / 100);
-            alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            if(percY>0) {
+                int h = (height * percY) / 100;
+                height = height - ((h * percY) / 100);
+                int w = (width * percY) / 100;
+                width = width - ((w * percY) / 100);
+                alphaPaint.setAlpha(alphaPaint.getAlpha() - Math.abs((150 * percY) / 100));
+            }
         }
+//        if(bitmapObjectClass.getGenericObject().toString().equals("Cadbury"))
+//            Log.d("-----%XY",""+percX+","+percY);
 
         RectF rect = new RectF();
         rect.set(x - width / 2, y - height / 2, x + width / 2, y + height / 2);

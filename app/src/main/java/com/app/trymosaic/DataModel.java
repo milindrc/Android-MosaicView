@@ -87,4 +87,9 @@ public class DataModel implements BitmapContainer, UrlContainer {
     public String toUrl() {
         return url;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
