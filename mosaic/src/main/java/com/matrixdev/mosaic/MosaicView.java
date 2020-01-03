@@ -29,7 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
@@ -350,7 +354,8 @@ public class MosaicView extends View {
     }
 
     private Bitmap addRoundCorners(Bitmap bmp, int padding_y) {
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight() + padding_y, bmp.getConfig());
+
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight() + padding_y, bmp.getConfig()==null? Bitmap.Config.ARGB_8888 : bmp.getConfig());
 
         RectF rect = new RectF();
         rect.set(0, padding_y, bmp.getWidth(), bmp.getHeight() + padding_y);
@@ -545,9 +550,9 @@ public class MosaicView extends View {
             Glide.with(context)
                     .asBitmap()
                     .load(objects.get(i).toUrl())
-                    .into(new SimpleTarget<Bitmap>() {
+                    .into(new CustomTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             Log.d("----", "loaded" + finalI);
                             if (isRoundedEdges) {
                                 Bitmap rounded = addRoundCorners(resource, random.get(finalI));
@@ -556,6 +561,11 @@ public class MosaicView extends View {
                                 bitmapObjectClass.setBitmap(pad(resource, random.get(finalI)));
                             }
                             invalidate();
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
                         }
                     });
             bitmapObjectClass.setGenericObject(objects.get(i));
