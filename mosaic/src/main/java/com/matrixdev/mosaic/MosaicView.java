@@ -24,8 +24,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewTreeObserver;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 
@@ -53,15 +55,15 @@ public class MosaicView extends View {
 
     private int halfOffset = 60;
     private int fullOffset = 120;
-    private int leftDistance;
-    private int rightDistance;
+    private int leftDistance = 1;
+    private int rightDistance=1;
     private int midX;
     private int currentPosX;
     private int maxScrollY;
     private int verLim;
     private int midY;
-    private int topDistance;
-    private int bottomDistance;
+    private int topDistance = 1;
+    private int bottomDistance =1;
     private int currentPosY;
     private Bitmap placeholder;
 
@@ -75,8 +77,6 @@ public class MosaicView extends View {
     private Handler timer;
     private ItemChooseInterface onItemChooseListener;
     private ViewGroup rootview;
-    private float mx;
-    private float my;
 
     private boolean isRoundedEdges;
     private boolean isFadeEnabled;
@@ -240,8 +240,8 @@ public class MosaicView extends View {
         hscroll = ((HScroll) ((LinearLayout) getParent()).getParent());
         vScroll = (VScroll) ((HScroll) ((LinearLayout) getParent()).getParent()).getParent();
 
-        rootview = (ViewGroup) vScroll.getParent();
-        rootview.setOnTouchListener(new OnTouchListener() {
+        vScroll.setHs(hscroll);
+        vScroll.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 float curX, curY;
@@ -249,8 +249,6 @@ public class MosaicView extends View {
                 switch (event.getAction()) {
 
                     case MotionEvent.ACTION_DOWN:
-                        mx = event.getX();
-                        my = event.getY();
                         touchX = event.getX() + hscroll.getScrollX();
                         touchY = event.getY() + vScroll.getScrollY();
                         invalidate();
@@ -268,10 +266,6 @@ public class MosaicView extends View {
                             touchX = 0;
                             touchY = 0;
                         }
-                        vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                        hscroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                        mx = curX;
-                        my = curY;
                         break;
                     case MotionEvent.ACTION_UP:
                         if (touchX != 0) {
@@ -283,8 +277,6 @@ public class MosaicView extends View {
                         }
                         curX = event.getX();
                         curY = event.getY();
-                        vScroll.scrollBy((int) (mx - curX), (int) (my - curY));
-                        hscroll.scrollBy((int) (mx - curX), (int) (my - curY));
                         break;
                 }
 

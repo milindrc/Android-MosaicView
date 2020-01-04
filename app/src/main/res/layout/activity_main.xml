@@ -15,6 +15,7 @@
             android:id="@+id/vScroll">
 
             <com.matrixdev.mosaic.HScroll
+
                 android:id="@+id/hScroll"
                 android:scrollbars="none"
                 android:layout_width="match_parent"

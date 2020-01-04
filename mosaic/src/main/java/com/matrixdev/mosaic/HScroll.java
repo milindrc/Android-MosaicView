@@ -4,12 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 
 public class HScroll extends HorizontalScrollView {
 
 
     OnTouchListener onTouchListener;
-    boolean isBlocked;
+    ScrollView scrollView;
 
     public HScroll(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -23,20 +24,26 @@ public class HScroll extends HorizontalScrollView {
         super(context);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-//        return onTouchListener.onTouch(null,ev);
-        return isBlocked;
-    }
+//    @Override
+////    public boolean onTouchEvent(MotionEvent ev) {
+//////        return onTouchListener.onTouch(null,ev);
+////        return false;
+////    }
 
+//    @Override public boolean onTouchEvent(MotionEvent event)
+//    {
+//        boolean ret = super.onTouchEvent(event);
+//        ret = ret | scrollView.onTouchEvent(event);
+//        return ret;
+//    }
+//
+//    @Override public boolean onInterceptTouchEvent(MotionEvent event)
+//    {
+//        boolean ret = super.onInterceptTouchEvent(event);
+//        ret = ret | scrollView.onInterceptTouchEvent(event);
+//        return ret;
+//    }
 
-    public boolean isBlocked() {
-        return isBlocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
 
     public OnTouchListener getOnTouchListener() {
         return onTouchListener;
@@ -45,5 +52,13 @@ public class HScroll extends HorizontalScrollView {
     @Override
     public void setOnTouchListener(OnTouchListener onTouchListener) {
         this.onTouchListener = onTouchListener;
+    }
+
+    public ScrollView getScrollView() {
+        return scrollView;
+    }
+
+    public void setScrollView(ScrollView scrollView) {
+        this.scrollView = scrollView;
     }
 }
